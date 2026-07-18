@@ -500,7 +500,12 @@ function buildFreeAgentSuggestionReason(team, outgoing, incoming) {
 }
 
 function buildTradeSuggestionReason(teamA, teamB) {
-    return `${teamA.name} and ${teamB.name} are being offered a similar-rated roster shake-up based on recent results.`;
+
+    const formA = getCareerTeamFormLabel(teamA);
+    const formB = getCareerTeamFormLabel(teamB);
+
+    return `${teamA.name} (${formA}) and ${teamB.name} (${formB}) are exploring a same-region roster move that could strengthen both teams.`;
+
 }
 
 function getCareerTeamFormLabel(team) {
