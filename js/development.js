@@ -295,31 +295,55 @@ function generateAutomaticTransferSuggestions(options = {}) {
         });
     });
 
-    /* Similar-rated player swaps for underperforming teams. */
-    for (let index = 0; index < rankedTeams.length; index++) {
+/* Region-locked player trades */
+const regions = [...new Set(rankedTeams.map(team => team.region).filter(Boolean))];
+
+for (const region of regions) {
+
+    const regionalTeams = rankedTeams.filter(
+        team => team.region === region
+    );
+
+    const usedTeams = new Set();
+
+    for (const teamA of regionalTeams) {
+
         if (suggestions.length >= suggestionCount) break;
 
-        const teamA = rankedTeams[index];
-        const teamB = rankedTeams[(index + 1) % rankedTeams.length];
+        if (usedTeams.has(teamA.id)) continue;
 
-        if (!teamA || !teamB || teamA.id === teamB.id) continue;
+        let bestTrade = null;
+        let bestTeam = null;
 
-        const pair = findBalancedTradePair(teamA, teamB);
-        if (
-            !pair ||
-            usedPlayers.has(String(pair.playerA.id)) ||
-            usedPlayers.has(String(pair.playerB.id))
-        ) continue;
+        for (const teamB of regionalTeams) {
 
-        const key = [teamA.id, teamB.id]
-            .map(String)
-            .sort()
-            .join(":") + `:${pair.playerA.id}:${pair.playerB.id}`;
+            if (teamA.id === teamB.id) continue;
+            if (usedTeams.has(teamB.id)) continue;
 
-        if (usedPairs.has(key)) continue;
-        usedPairs.add(key);
-        usedPlayers.add(String(pair.playerA.id));
-        usedPlayers.add(String(pair.playerB.id));
+            const pair = findBalancedTradePair(teamA, teamB);
+
+            if (!pair) continue;
+
+            if (
+                usedPlayers.has(String(pair.playerA.id)) ||
+                usedPlayers.has(String(pair.playerB.id))
+            ) {
+                continue;
+            }
+
+            if (!bestTrade || pair.value < bestTrade.value) {
+                bestTrade = pair;
+                bestTeam = teamB;
+            }
+        }
+
+        if (!bestTrade || !bestTeam) continue;
+
+        usedTeams.add(teamA.id);
+        usedTeams.add(bestTeam.id);
+
+        usedPlayers.add(String(bestTrade.playerA.id));
+        usedPlayers.add(String(bestTrade.playerB.id));
 
         suggestions.push({
             id: createCareerId("suggestion"),
@@ -327,30 +351,42 @@ function generateAutomaticTransferSuggestions(options = {}) {
             status: "pending",
             createdAt: new Date().toISOString(),
             period,
+
             teamAId: teamA.id,
             teamAName: teamA.name,
-            playerAId: pair.playerA.id,
-            playerAName: pair.playerA.name,
-            playerARating: Number(pair.playerA.rating || 0),
-            teamBId: teamB.id,
-            teamBName: teamB.name,
-            playerBId: pair.playerB.id,
-            playerBName: pair.playerB.name,
-            playerBRating: Number(pair.playerB.rating || 0),
-            projectedTeamARating: calculateProjectedTeamRating(
+
+            playerAId: bestTrade.playerA.id,
+            playerAName: bestTrade.playerA.name,
+            playerARating: Number(bestTrade.playerA.rating || 0),
+
+            teamBId: bestTeam.id,
+            teamBName: bestTeam.name,
+
+            playerBId: bestTrade.playerB.id,
+            playerBName: bestTrade.playerB.name,
+            playerBRating: Number(bestTrade.playerB.rating || 0),
+
+            projectedTeamARating:
+                calculateProjectedTeamRating(
+                    teamA,
+                    bestTrade.playerA.id,
+                    bestTrade.playerB
+                ),
+
+            projectedTeamBRating:
+                calculateProjectedTeamRating(
+                    bestTeam,
+                    bestTrade.playerB.id,
+                    bestTrade.playerA
+                ),
+
+            reason: buildTradeSuggestionReason(
                 teamA,
-                pair.playerA.id,
-                pair.playerB
-            ),
-            projectedTeamBRating: calculateProjectedTeamRating(
-                teamB,
-                pair.playerB.id,
-                pair.playerA
-            ),
-            reason: buildTradeSuggestionReason(teamA, teamB)
+                bestTeam
+            )
         });
     }
-
+}
     const combined = [
         ...suggestions,
         ...existing.filter(old =>
@@ -404,38 +440,60 @@ function getCareerTeamPoints(teamId) {
 }
 
 function findBalancedTradePair(teamA, teamB) {
-    const playersA = Array.isArray(teamA.players) ? teamA.players : [];
-    const playersB = Array.isArray(teamB.players) ? teamB.players : [];
+
+    if (
+        !teamA ||
+        !teamB ||
+        teamA.region !== teamB.region
+    ) {
+        return null;
+    }
+
+    const playersA = Array.isArray(teamA.players)
+        ? teamA.players
+        : [];
+
+    const playersB = Array.isArray(teamB.players)
+        ? teamB.players
+        : [];
+
     let best = null;
 
     playersA.forEach(playerA => {
+
         playersB.forEach(playerB => {
+
             const gap = Math.abs(
                 Number(playerA.rating || 0) -
                 Number(playerB.rating || 0)
             );
 
-            if (gap > 4) return;
+            if (gap > 6) return;
 
-            const value = gap +
+            const score =
+                gap * 1.5 +
                 Math.abs(
                     Number(teamA.rating || 0) -
                     Number(teamB.rating || 0)
-                ) * 0.05;
+                ) * 0.08;
 
-            if (!best || value < best.value) {
+            if (!best || score < best.value) {
+
                 best = {
                     playerA,
                     playerB,
-                    value
+                    value: score
                 };
+
             }
+
         });
+
     });
 
     return best;
-}
 
+}
 function calculateProjectedTeamRating(team, outgoingPlayerId, incomingPlayer) {
     const projectedPlayers = (team.players || []).map(player =>
         String(player.id) === String(outgoingPlayerId)
@@ -462,9 +520,13 @@ function buildFreeAgentSuggestionReason(team, outgoing, incoming) {
 }
 
 function buildTradeSuggestionReason(teamA, teamB) {
-    return `${teamA.name} and ${teamB.name} are being offered a similar-rated roster shake-up based on recent results.`;
-}
 
+    const formA = getCareerTeamFormLabel(teamA);
+    const formB = getCareerTeamFormLabel(teamB);
+
+    return `${teamA.name} (${formA}) and ${teamB.name} (${formB}) are exploring a same-region roster move that could strengthen both teams.`;
+
+}
 function getCareerTeamFormLabel(team) {
     const formState = readCareerJson("rlcsTeamFormStateV1", {});
     const recent = formState?.[String(team.id)]?.recentEvents || [];
@@ -575,46 +637,27 @@ function approveTransferSuggestion(suggestionId) {
 }
 
 function applySuggestedTrade(suggestion) {
+
     const teamA = getCareerTeam(suggestion.teamAId);
     const teamB = getCareerTeam(suggestion.teamBId);
-    const playerAIndex = teamA?.players?.findIndex(player =>
-        String(player.id) === String(suggestion.playerAId)
-    );
-    const playerBIndex = teamB?.players?.findIndex(player =>
-        String(player.id) === String(suggestion.playerBId)
-    );
 
-    if (
-        !teamA ||
-        !teamB ||
-        playerAIndex < 0 ||
-        playerBIndex < 0
-    ) {
+    if (!teamA || !teamB) {
         return false;
     }
 
-    const playerA = { ...teamA.players[playerAIndex] };
-    const playerB = { ...teamB.players[playerBIndex] };
-
-    teamA.players[playerAIndex] = playerB;
-    teamB.players[playerBIndex] = playerA;
-
-    recalculateCareerTeamRating(teamA);
-    recalculateCareerTeamRating(teamB);
-    resetCareerTeamAfterRosterChange(teamA, "Approved automated trade suggestion");
-    resetCareerTeamAfterRosterChange(teamB, "Approved automated trade suggestion");
-    saveCareerTeams();
-
-    if (typeof addTransferRecord === "function") {
-        addTransferRecord({
-            type: "automatedTrade",
-            teamIds: [teamA.id, teamB.id],
-            playerIds: [playerA.id, playerB.id],
-            summary: `${teamA.name} traded ${playerA.name} to ${teamB.name} for ${playerB.name}.`
-        });
+    if (teamA.region !== teamB.region) {
+        return false;
     }
 
-    return true;
+    const playerAIndex = teamA.players.findIndex(
+        player => String(player.id) === String(suggestion.playerAId)
+    );
+
+    const playerBIndex = teamB.players.findIndex(
+        player => String(player.id) === String(suggestion.playerBId)
+    );
+
+    ...
 }
 
 function applySuggestedFreeAgentSigning(suggestion) {
