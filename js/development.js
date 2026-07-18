@@ -419,36 +419,59 @@ function getCareerTeamPoints(teamId) {
 }
 
 function findBalancedTradePair(teamA, teamB) {
-    const playersA = Array.isArray(teamA.players) ? teamA.players : [];
-    const playersB = Array.isArray(teamB.players) ? teamB.players : [];
+
+    if (
+        !teamA ||
+        !teamB ||
+        teamA.region !== teamB.region
+    ) {
+        return null;
+    }
+
+    const playersA = Array.isArray(teamA.players)
+        ? teamA.players
+        : [];
+
+    const playersB = Array.isArray(teamB.players)
+        ? teamB.players
+        : [];
+
     let best = null;
 
     playersA.forEach(playerA => {
+
         playersB.forEach(playerB => {
+
             const gap = Math.abs(
                 Number(playerA.rating || 0) -
                 Number(playerB.rating || 0)
             );
 
-            if (gap > 4) return;
+            if (gap > 6) return;
 
-            const value = gap +
+            const score =
+                gap * 1.5 +
                 Math.abs(
                     Number(teamA.rating || 0) -
                     Number(teamB.rating || 0)
-                ) * 0.05;
+                ) * 0.08;
 
-            if (!best || value < best.value) {
+            if (!best || score < best.value) {
+
                 best = {
                     playerA,
                     playerB,
-                    value
+                    value: score
                 };
+
             }
+
         });
+
     });
 
     return best;
+
 }
 
 function calculateProjectedTeamRating(team, outgoingPlayerId, incomingPlayer) {
