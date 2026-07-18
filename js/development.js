@@ -618,6 +618,9 @@ function approveTransferSuggestion(suggestionId) {
 }
 
 function applySuggestedTrade(suggestion) {
+   if (teamA.region !== teamB.region) {
+    return false;
+}
     const teamA = getCareerTeam(suggestion.teamAId);
     const teamB = getCareerTeam(suggestion.teamBId);
     const playerAIndex = teamA?.players?.findIndex(player =>
