@@ -1,0 +1,2768 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>RLCS League Simulator</title>
+
+    <link rel="stylesheet"
+        href="css/style.css">
+
+    <link rel="stylesheet"
+        href="css/rlcs-insane.css">
+
+</head>
+
+<body>
+
+    <div class="app">
+
+        <!-- SIDEBAR -->
+
+        <aside id="appSidebar" class="sidebar">
+
+            <div class="sidebar-topbar">
+                <button class="sidebar-mobile-close"
+                    type="button"
+                    aria-label="Close navigation"
+                    onclick="closeMobileSidebar()">
+                    ×
+                </button>
+
+                <div class="sidebar-brand">
+                    <div class="sidebar-brand-mark">RL</div>
+                    <div class="sidebar-brand-copy">
+                        <strong>RLCS</strong>
+                        <span>League Simulator</span>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav" aria-label="Main navigation">
+
+                <div class="sidebar-nav-section">
+                    <span class="sidebar-nav-label">Overview</span>
+
+                    <button class="nav-button active" data-page="dashboard"
+                        title="Dashboard" onclick="showPage('dashboard')">
+                        <span class="nav-icon">⌂</span>
+                        <span class="nav-label">Dashboard</span>
+                    </button>
+
+                    <button class="nav-button" data-page="season"
+                        title="Season" onclick="showPage('season')">
+                        <span class="nav-icon">◫</span>
+                        <span class="nav-label">Season</span>
+                        <span id="sidebarSeasonBadge" class="nav-badge hidden"></span>
+                    </button>
+                </div>
+
+                <div class="sidebar-nav-section">
+                    <span class="sidebar-nav-label">Competition</span>
+
+                    <button class="nav-button" data-page="tournament"
+                        title="Events" onclick="showPage('tournament')">
+                        <span class="nav-icon">◆</span>
+                        <span class="nav-label">Events</span>
+                        <span id="sidebarEventBadge" class="nav-badge hidden"></span>
+                    </button>
+
+                    <button class="nav-button" data-page="league"
+                        title="League Table" onclick="showPage('league')">
+                        <span class="nav-icon">≡</span>
+                        <span class="nav-label">League Table</span>
+                    </button>
+
+                    <button class="nav-button" data-page="lans"
+                        title="LAN Qualification" onclick="showPage('lans')">
+                        <span class="nav-icon">◎</span>
+                        <span class="nav-label">LAN Qualification</span>
+                    </button>
+
+                    <button class="nav-button" data-page="history"
+                        title="History" onclick="showPage('history')">
+                        <span class="nav-icon">↺</span>
+                        <span class="nav-label">History</span>
+                    </button>
+                </div>
+
+                <div class="sidebar-nav-section">
+                    <span class="sidebar-nav-label">Management</span>
+
+                    <button class="nav-button" data-page="teams"
+                        title="Teams" onclick="showPage('teams')">
+                        <span class="nav-icon">♜</span>
+                        <span class="nav-label">Teams</span>
+                    </button>
+
+                    <button class="nav-button" data-page="profiles"
+                        title="Team Hub" onclick="showPage('profiles')">
+                        <span class="nav-icon">▣</span>
+                        <span class="nav-label">Team Hub</span>
+                    </button>
+
+                    <button class="nav-button" data-page="transfers"
+                        title="Transfers & Development" onclick="showPage('transfers')">
+                        <span class="nav-icon">⇄</span>
+                        <span class="nav-label">Transfers</span>
+                        <span id="sidebarTransferBadge" class="nav-badge hidden"></span>
+                    </button>
+
+                    <button class="nav-button" data-page="journalist"
+                        title="Sheep Esports" onclick="showPage('journalist')">
+                        <span class="nav-icon">S</span>
+                        <span class="nav-label">Sheep Esports</span>
+                        <span id="sidebarJournalistBadge" class="nav-badge hidden"></span>
+                    </button>
+
+                    <button class="nav-button" data-page="offseason"
+                        title="Offseason" onclick="showPage('offseason')">
+                        <span class="nav-icon">◌</span>
+                        <span class="nav-label">Offseason</span>
+                        <span id="sidebarOffseasonBadge" class="nav-badge hidden"></span>
+                    </button>
+                </div>
+
+                <div class="sidebar-nav-section">
+                    <span class="sidebar-nav-label">Analysis</span>
+
+                    <button class="nav-button" data-page="simulationLab"
+                        title="Simulation Lab" onclick="showPage('simulationLab')">
+                        <span class="nav-icon">⌁</span>
+                        <span class="nav-label">Simulation Lab</span>
+                    </button>
+                </div>
+
+                <div class="sidebar-nav-section">
+                    <span class="sidebar-nav-label">System</span>
+
+                    <button class="nav-button" data-page="rules"
+                        title="Competition Rules" onclick="showPage('rules')">
+                        <span class="nav-icon">§</span>
+                        <span class="nav-label">Rules</span>
+                    </button>
+
+                    <button class="nav-button" data-page="system"
+                        title="System Manager" onclick="showPage('system')">
+                        <span class="nav-icon">◇</span>
+                        <span class="nav-label">System</span>
+                        <span id="sidebarSystemBadge" class="nav-badge hidden"></span>
+                    </button>
+
+                    <button class="nav-button" data-page="settings"
+                        title="Settings" onclick="showPage('settings')">
+                        <span class="nav-icon">⚙</span>
+                        <span class="nav-label">Settings</span>
+                    </button>
+                </div>
+
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="sidebar-season-card">
+                    <div class="sidebar-season-copy">
+                        <span>Current Season</span>
+                        <strong id="sidebarSeasonName">No active season</strong>
+                    </div>
+
+                    <div class="sidebar-season-progress">
+                        <div><span id="sidebarSeasonProgressFill"></span></div>
+                        <small id="sidebarSeasonProgressText">0% complete</small>
+                    </div>
+
+                    <button id="sidebarContinueButton" type="button"
+                        onclick="dashboardContinueSeason()">
+                        Continue Season
+                    </button>
+                </div>
+
+                <div class="sidebar-footer-row">
+                    <span id="sidebarSaveIndicator" class="sidebar-save-indicator">Saved locally</span>
+                    <button class="sidebar-collapse-button" type="button"
+                        aria-label="Collapse sidebar" onclick="toggleSidebar()">
+                        <span class="sidebar-collapse-icon">‹</span>
+                        <span class="sidebar-collapse-label">Collapse</span>
+                    </button>
+                </div>
+            </div>
+
+        </aside>
+
+        <button class="sidebar-mobile-toggle" type="button"
+            aria-label="Open navigation" onclick="openMobileSidebar()">
+            ☰
+        </button>
+
+        <div id="sidebarScrim" class="sidebar-scrim"
+            onclick="closeMobileSidebar()"></div>
+
+        <!-- MAIN CONTENT -->
+
+
+        <main class="main-content">
+
+            <!-- DASHBOARD -->
+
+            <section id="dashboardPage"
+                class="page">
+
+                <div class="page-header dashboard-page-header">
+
+                    <div>
+                        <span class="dashboard-page-kicker">
+                            League Command Centre
+                        </span>
+
+                        <h2>Dashboard</h2>
+
+                        <p>
+                            Continue the season, track qualification, and manage the league from one place.
+                        </p>
+                    </div>
+
+                    <div class="dashboard-header-actions">
+
+                        <button class="secondary-button"
+                            onclick="dashboardOpenEventsPage('create')">
+                            Create Event
+                        </button>
+
+                        <button class="primary-button"
+                            id="dashboardContinueButton"
+                            onclick="dashboardContinueSeason()">
+                            Continue Season
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <div id="dashboardAlerts"
+                    class="dashboard-alerts hidden">
+                </div>
+
+                <section class="dashboard-season-hero">
+
+                    <div class="dashboard-season-hero-main">
+
+                        <span class="dashboard-hero-kicker">
+                            Current Season
+                        </span>
+
+                        <h3 id="dashboardSeasonName">
+                            No Active Season
+                        </h3>
+
+                        <p id="dashboardSeasonContext">
+                            Create a season to begin tracking your league journey.
+                        </p>
+
+                        <div class="dashboard-progress-row">
+
+                            <div class="dashboard-progress-track">
+                                <div id="dashboardProgressFill"
+                                    class="dashboard-progress-fill">
+                                </div>
+                            </div>
+
+                            <strong id="dashboardProgressText">
+                                0% complete
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                    <div id="dashboardNextAction"
+                        class="dashboard-next-action">
+                    </div>
+
+                </section>
+
+                <div class="dashboard-stat-grid">
+
+                    <button class="dashboard-stat-card"
+                        onclick="dashboardOpenTeamsCreator()">
+
+                        <span class="dashboard-stat-label">
+                            Total Teams
+                        </span>
+
+                        <strong id="teamCount">0</strong>
+
+                        <small>Manage team library</small>
+
+                    </button>
+
+                    <button class="dashboard-stat-card"
+                        onclick="dashboardOpenSeasonPage()">
+
+                        <span class="dashboard-stat-label">
+                            Season Events
+                        </span>
+
+                        <strong id="tournamentCount">0</strong>
+
+                        <small>Completed / scheduled</small>
+
+                    </button>
+
+                    <button class="dashboard-stat-card"
+                        onclick="dashboardOpenSeasonPage()">
+
+                        <span class="dashboard-stat-label">
+                            Current Stage
+                        </span>
+
+                        <strong id="currentSeasonName">
+                            Off-season
+                        </strong>
+
+                        <small>View season progression</small>
+
+                    </button>
+
+                    <button class="dashboard-stat-card"
+                        onclick="dashboardOpenTransfers()">
+
+                        <span class="dashboard-stat-label">
+                            Transfers Made
+                        </span>
+
+                        <strong id="dashboardTransferCount">0</strong>
+
+                        <small>Open transfer centre</small>
+
+                    </button>
+
+                    <button class="dashboard-stat-card"
+                        onclick="dashboardOpenLans()">
+
+                        <span class="dashboard-stat-label">
+                            Worlds Field
+                        </span>
+
+                        <strong id="dashboardWorldsCount">0 / 16</strong>
+
+                        <small>LCQ-qualified teams</small>
+
+                    </button>
+
+                </div>
+
+                <div class="dashboard-control-grid">
+
+                    <section class="dashboard-panel dashboard-panel-wide">
+
+                        <div class="dashboard-panel-heading">
+
+                            <div>
+                                <span>Season Roadmap</span>
+                                <h3>Season Timeline</h3>
+                            </div>
+
+                            <button onclick="dashboardOpenSeasonPage()">
+                                Full Calendar
+                            </button>
+
+                        </div>
+
+                        <div id="dashboardSeasonTimeline"
+                            class="dashboard-season-timeline">
+                        </div>
+
+                    </section>
+
+                    <section class="dashboard-panel">
+
+                        <div class="dashboard-panel-heading">
+
+                            <div>
+                                <span>Ready to Play</span>
+                                <h3>Upcoming Events</h3>
+                            </div>
+
+                            <button onclick="dashboardOpenEventsPage('create')">
+                                Events
+                            </button>
+
+                        </div>
+
+                        <div id="dashboardUpcomingEvents"
+                            class="dashboard-upcoming-events">
+                        </div>
+
+                    </section>
+
+                    <section class="dashboard-panel">
+
+                        <div class="dashboard-panel-heading">
+
+                            <div>
+                                <span>Regional Form</span>
+                                <h3>Regional Leaders</h3>
+                            </div>
+
+                            <button onclick="dashboardOpenLeague()">
+                                Standings
+                            </button>
+
+                        </div>
+
+                        <div id="dashboardRegionalLeaders"
+                            class="dashboard-regional-leaders">
+                        </div>
+
+                    </section>
+
+                    <section class="dashboard-panel">
+
+                        <div class="dashboard-panel-heading">
+
+                            <div>
+                                <span>Qualification</span>
+                                <h3>LAN Race</h3>
+                            </div>
+
+                        </div>
+
+                        <div id="dashboardQualificationPreview">
+                        </div>
+
+                    </section>
+
+                    <section class="dashboard-panel">
+
+                        <div class="dashboard-panel-heading">
+
+                            <div>
+                                <span>Latest Champions</span>
+                                <h3>Recent Results</h3>
+                            </div>
+
+                            <button onclick="dashboardOpenHistory()">
+                                History
+                            </button>
+
+                        </div>
+
+                        <div id="dashboardRecentResults"
+                            class="dashboard-recent-results">
+                        </div>
+
+                    </section>
+
+                    <section class="dashboard-panel">
+
+                        <div class="dashboard-panel-heading">
+
+                            <div>
+                                <span>League Feed</span>
+                                <h3>Recent Activity</h3>
+                            </div>
+
+                        </div>
+
+                        <div id="dashboardActivityFeed"
+                            class="dashboard-activity-feed">
+                        </div>
+
+                    </section>
+
+                    <section class="dashboard-panel dashboard-quick-actions-panel">
+
+                        <div class="dashboard-panel-heading">
+
+                            <div>
+                                <span>Shortcuts</span>
+                                <h3>Quick Actions</h3>
+                            </div>
+
+                        </div>
+
+                        <div class="dashboard-quick-actions">
+
+                            <button onclick="dashboardContinueSeason()">
+                                <strong>Continue Season</strong>
+                                <span>Load the next event or tiebreaker</span>
+                            </button>
+
+                            <button onclick="dashboardOpenEventsPage('create')">
+                                <strong>Create Event</strong>
+                                <span>Build a custom tournament</span>
+                            </button>
+
+                            <button onclick="dashboardOpenTeamsCreator()">
+                                <strong>Create Team</strong>
+                                <span>Add a new three-player roster</span>
+                            </button>
+
+                            <button onclick="dashboardOpenTransfers()">
+                                <strong>Transfers</strong>
+                                <span>Trade and sign players</span>
+                            </button>
+
+                            <button onclick="dashboardOpenLeague()">
+                                <strong>League Table</strong>
+                                <span>Review points and rankings</span>
+                            </button>
+
+                            <button onclick="dashboardOpenSettings()">
+                                <strong>Export Backup</strong>
+                                <span>Protect your simulator data</span>
+                            </button>
+
+                        </div>
+
+                    </section>
+
+                </div>
+
+            </section>
+
+            <!-- TEAMS -->
+
+            <section id="teamsPage"
+                class="page hidden">
+
+                <div class="page-header teams-page-header">
+                    <div>
+                        <h2>Teams</h2>
+                        <p>
+                            Build, edit, duplicate, and manage complete three-player rosters.
+                        </p>
+                    </div>
+
+                    <button class="secondary-button"
+                        onclick="cancelTeamEdit()">
+                        New Team
+                    </button>
+                </div>
+
+                <div class="teams-workspace">
+
+                    <div class="teams-browser-panel">
+
+                        <div class="teams-browser-heading">
+                            <div>
+                                <h3>Team Library</h3>
+                                <span id="teamListSummary">0 teams</span>
+                            </div>
+                        </div>
+
+                        <div class="teams-browser-toolbar">
+                            <input id="teamSearchInput"
+                                type="search"
+                                placeholder="Search teams or players...">
+
+                            <select id="teamRegionFilter">
+                                <option value="all">All Regions</option>
+                                <option value="NA">North America</option>
+                                <option value="EU">Europe</option>
+                                <option value="SAM">South America</option>
+                                <option value="MENA">MENA</option>
+                                <option value="OCE">Oceania</option>
+                                <option value="APAC">APAC</option>
+                                <option value="SSA">SSA</option>
+                            </select>
+                        </div>
+
+                        <div id="teamGrid"
+                            class="team-list-grid">
+                        </div>
+
+                    </div>
+
+                    <div id="teamBuilderPanel"
+                        class="team-builder-panel">
+
+                        <div class="team-builder-heading">
+                            <div>
+                                <h3 id="teamFormTitle">Quick Create Team</h3>
+                                <p id="teamFormDescription">
+                                    Create a complete three-player roster in one clean form.
+                                </p>
+                            </div>
+
+                            <div class="live-team-rating-card">
+                                <span>Team Rating</span>
+                                <strong id="liveTeamRating">75</strong>
+                            </div>
+                        </div>
+
+                        <div id="teamFormNotice"
+                            class="team-form-notice hidden">
+                        </div>
+
+                        <div class="team-builder-grid">
+                            <div class="team-field team-field-wide">
+                                <label for="teamName">Team Name</label>
+                                <input id="teamName"
+                                    autocomplete="off"
+                                    placeholder="Enter team name">
+                                <small id="teamNameError"
+                                    class="team-field-error"></small>
+                            </div>
+
+                            <div class="team-field">
+                                <label for="teamRegion">Region</label>
+                                <select id="teamRegion">
+                                    <option value="NA">North America</option>
+                                    <option value="EU">Europe</option>
+                                    <option value="SAM">South America</option>
+                                    <option value="MENA">MENA</option>
+                                    <option value="OCE">Oceania</option>
+                                    <option value="APAC">APAC</option>
+                                    <option value="SSA">SSA</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="team-rating-preview">
+                            <div id="liveTeamRatingFill"></div>
+                        </div>
+
+                        <div class="team-builder-section">
+                            <div class="team-builder-section-heading">
+                                <div>
+                                    <h4>Team Logo</h4>
+                                    <p>Upload, drag, paste, or use a URL. Images are resized before storage.</p>
+                                </div>
+
+                                <button id="removeTeamLogoButton"
+                                    class="text-button hidden"
+                                    onclick="removeTeamLogo()">
+                                    Remove Logo
+                                </button>
+                            </div>
+
+                            <div class="team-logo-tools">
+                                <div id="teamLogoDropZone"
+                                    class="team-logo-drop-zone"
+                                    tabindex="0">
+                                    <img id="teamLogoPreview"
+                                        class="team-logo-preview hidden"
+                                        alt="Team logo preview">
+
+                                    <div id="teamLogoPlaceholder"
+                                        class="team-logo-placeholder">
+                                        <strong>Drop or paste a logo</strong>
+                                        <span>Click to browse</span>
+                                    </div>
+                                </div>
+
+                                <div class="team-logo-inputs">
+                                    <input type="file"
+                                        id="teamLogo"
+                                        accept="image/*"
+                                        class="visually-hidden">
+
+                                    <label for="teamLogoUrl">Logo URL</label>
+
+                                    <div class="team-inline-input">
+                                        <input id="teamLogoUrl"
+                                            type="url"
+                                            placeholder="https://example.com/logo.png">
+
+                                        <button class="secondary-button"
+                                            onclick="useTeamLogoUrl()">
+                                            Use URL
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="team-builder-section">
+                            <div class="team-builder-section-heading">
+                                <div>
+                                    <h4>Players</h4>
+                                    <p>Enter each player and rating. The team rating updates automatically.</p>
+                                </div>
+                            </div>
+
+                            <div class="team-player-editor-list">
+                                <div class="team-player-editor-row">
+                                    <span class="team-player-number">1</span>
+
+                                    <div class="team-player-name-field">
+                                        <label for="player1Name">Player Name</label>
+                                        <input id="player1Name"
+                                            autocomplete="off"
+                                            placeholder="Player 1">
+                                    </div>
+
+                                    <div class="team-player-rating-field">
+                                        <label for="player1Rating">Rating</label>
+                                        <input id="player1Rating"
+                                            type="number"
+                                            min="1"
+                                            max="100"
+                                            value="75">
+                                    </div>
+
+                                    <small id="player1Error"
+                                        class="team-field-error team-player-error"></small>
+                                </div>
+
+                                <div class="team-player-editor-row">
+                                    <span class="team-player-number">2</span>
+
+                                    <div class="team-player-name-field">
+                                        <label for="player2Name">Player Name</label>
+                                        <input id="player2Name"
+                                            autocomplete="off"
+                                            placeholder="Player 2">
+                                    </div>
+
+                                    <div class="team-player-rating-field">
+                                        <label for="player2Rating">Rating</label>
+                                        <input id="player2Rating"
+                                            type="number"
+                                            min="1"
+                                            max="100"
+                                            value="75">
+                                    </div>
+
+                                    <small id="player2Error"
+                                        class="team-field-error team-player-error"></small>
+                                </div>
+
+                                <div class="team-player-editor-row">
+                                    <span class="team-player-number">3</span>
+
+                                    <div class="team-player-name-field">
+                                        <label for="player3Name">Player Name</label>
+                                        <input id="player3Name"
+                                            autocomplete="off"
+                                            placeholder="Player 3">
+                                    </div>
+
+                                    <div class="team-player-rating-field">
+                                        <label for="player3Rating">Rating</label>
+                                        <input id="player3Rating"
+                                            type="number"
+                                            min="1"
+                                            max="100"
+                                            value="75">
+                                    </div>
+
+                                    <small id="player3Error"
+                                        class="team-field-error team-player-error"></small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <details class="team-quick-tools">
+                            <summary>Paste a roster</summary>
+
+                            <div class="team-quick-tools-body">
+                                <p>
+                                    Paste one player per line. Accepted examples:
+                                    <strong>Player Name, 82</strong> or
+                                    <strong>Player Name | 82</strong>.
+                                </p>
+
+                                <textarea id="rosterPasteInput"
+                                    rows="4"
+                                    placeholder="Player One, 82&#10;Player Two, 79&#10;Player Three, 84"></textarea>
+
+                                <button class="secondary-button"
+                                    onclick="fillRosterFromPaste()">
+                                    Fill Player Rows
+                                </button>
+                            </div>
+                        </details>
+
+                        <div class="team-form-actions">
+                            <button id="saveTeamButton"
+                                class="primary-button"
+                                onclick="createTeam()">
+                                Save Team
+                            </button>
+
+                            <button id="saveNextTeamButton"
+                                class="secondary-button"
+                                onclick="saveAndCreateNextTeam()">
+                                Save &amp; Create Next
+                            </button>
+
+                            <button id="cancelTeamEditButton"
+                                class="text-button hidden"
+                                onclick="cancelTeamEdit()">
+                                Cancel Editing
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <details class="team-bulk-creator">
+                    <summary>
+                        <div>
+                            <strong>Bulk Team Creator</strong>
+                            <span>Create an entire region from one pasted list.</span>
+                        </div>
+                    </summary>
+
+                    <div class="team-bulk-body">
+                        <div class="team-bulk-instructions">
+                            <p>Use one team per line:</p>
+                            <code>Team Name | EU | Player One:82 | Player Two:79 | Player Three:84</code>
+                        </div>
+
+                        <textarea id="bulkTeamInput"
+                            rows="8"
+                            placeholder="Team Alpha | EU | Player One:82 | Player Two:79 | Player Three:84"></textarea>
+
+                        <div class="team-bulk-actions">
+                            <button class="secondary-button"
+                                onclick="insertBulkTeamExample()">
+                                Insert Example
+                            </button>
+
+                            <button id="createBulkTeamsButton"
+                                class="primary-button"
+                                onclick="createBulkTeams()"
+                                disabled>
+                                Create All Teams
+                            </button>
+                        </div>
+
+                        <div id="bulkTeamPreview"
+                            class="bulk-team-preview">
+                            <p class="small">
+                                Format: Team Name | Region | Player 1:80 | Player 2:80 | Player 3:80
+                            </p>
+                        </div>
+                    </div>
+                </details>
+
+            </section>
+
+            <!-- TRANSFER MARKET V2 -->
+
+            <section id="transfersPage" class="page hidden">
+
+                <div class="page-header transfer-page-header">
+                    <div>
+                        <span class="page-kicker">Roster Management</span>
+                        <h2>Transfer Market</h2>
+                        <p>
+                            Run a structured transfer window, review each team&apos;s needs,
+                            negotiate proposals, and manage free agents without random roster churn.
+                        </p>
+                    </div>
+
+                    <div class="page-header-actions">
+                        <button class="secondary-button" onclick="showPage('journalist')">
+                            Open Sheep Esports
+                        </button>
+                        <button class="primary-button" onclick="startTransferMarket({force:true})">
+                            Start New Window
+                        </button>
+                    </div>
+                </div>
+
+                <div id="transferWindowStatus"></div>
+
+                <div class="transfer-market-tabs" role="tablist">
+                    <button class="active" data-transfer-tab="window" onclick="showTransferMarketTab('window')">Window</button>
+                    <button data-transfer-tab="needs" onclick="showTransferMarketTab('needs')">Team Needs</button>
+                    <button data-transfer-tab="proposals" onclick="showTransferMarketTab('proposals')">Proposals</button>
+                    <button data-transfer-tab="freeAgents" onclick="showTransferMarketTab('freeAgents')">Free Agents</button>
+                    <button data-transfer-tab="development" onclick="showTransferMarketTab('development')">Development</button>
+                    <button data-transfer-tab="history" onclick="showTransferMarketTab('history')">History & Manual</button>
+                </div>
+
+                <div data-transfer-panel="window" class="transfer-market-panel">
+                    <div id="transferMarketOverview" class="transfer-market-overview"></div>
+
+                    <div class="transfer-market-window-grid">
+                        <div class="team-form-card">
+                            <div class="section-heading-row">
+                                <div>
+                                    <span class="card-kicker">Market Controls</span>
+                                    <h3>Transfer Window Settings</h3>
+                                    <p>These rules control how active, risky, and chemistry-conscious the AI market is.</p>
+                                </div>
+                                <button class="primary-button" onclick="saveTransferMarketSettingsFromForm()">Save Settings</button>
+                            </div>
+
+                            <div class="transfer-settings-grid">
+                                <label>AI activity level
+                                    <select id="transferMarketActivity">
+                                        <option value="low">Low</option>
+                                        <option value="medium">Medium</option>
+                                        <option value="high">High</option>
+                                    </select>
+                                </label>
+                                <label>Proposals per day
+                                    <select id="transferMarketProposalsPerDay">
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="8">8</option>
+                                    </select>
+                                </label>
+                                <label>Window length
+                                    <select id="transferMarketWindowDays">
+                                        <option value="3">3 days</option>
+                                        <option value="5">5 days</option>
+                                        <option value="7">7 days</option>
+                                        <option value="10">10 days</option>
+                                        <option value="14">14 days</option>
+                                    </select>
+                                </label>
+                                <label>Maximum team moves
+                                    <select id="transferMarketMaxTeamMoves">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                    </select>
+                                </label>
+                                <label>Maximum player moves per season
+                                    <select id="transferMarketMaxPlayerMoves">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                    </select>
+                                </label>
+                                <label>Minimum projected improvement
+                                    <input id="transferMarketMinimumImprovement" type="number" min="0" max="5" step="0.1" value="0.7">
+                                </label>
+                                <label>Chemistry importance
+                                    <select id="transferMarketChemistryImportance">
+                                        <option value="light">Light</option>
+                                        <option value="balanced">Balanced</option>
+                                        <option value="strong">Strong</option>
+                                    </select>
+                                </label>
+                                <label>Market randomness
+                                    <select id="transferMarketRandomness">
+                                        <option value="low">Low</option>
+                                        <option value="medium">Medium</option>
+                                        <option value="high">High</option>
+                                    </select>
+                                </label>
+                            </div>
+
+                            <div class="transfer-rule-checks">
+                                <label><input id="transferMarketCrossRegion" type="checkbox" checked> Allow cross-region transfers</label>
+                                <label><input id="transferMarketProtectWinners" type="checkbox" checked> Protect successful rosters</label>
+                                <label><input id="transferMarketCompleteRosters" type="checkbox" checked> Require complete rosters when closing</label>
+                                <label><input id="transferMarketThreeTeamTrades" type="checkbox" checked> Allow rare three-team shuffles</label>
+                                <label><input id="transferMarketRumourLeaks" type="checkbox" checked> Leak proposals to Sheep Esports</label>
+                            </div>
+                        </div>
+
+                        <div class="team-form-card">
+                            <div class="section-heading-row">
+                                <div>
+                                    <span class="card-kicker">Daily Simulation</span>
+                                    <h3>Market Activity</h3>
+                                    <p>Each day creates a small number of explainable proposals instead of flooding the page.</p>
+                                </div>
+                            </div>
+                            <div id="transferMarketDailyLog" class="transfer-market-daily-log"></div>
+                        </div>
+                    </div>
+
+                    <div id="transferWindowSummary"></div>
+                </div>
+
+                <div data-transfer-panel="needs" class="transfer-market-panel hidden">
+                    <div class="section-heading-row">
+                        <div>
+                            <span class="card-kicker">AI Decision Making</span>
+                            <h3>Team Needs</h3>
+                            <p>Need scores compare expected performance, recent finishes, form, chemistry, roster stability, and previous moves.</p>
+                        </div>
+                        <label class="compact-filter">Region
+                            <select id="transferNeedRegion" onchange="setTransferNeedRegion(this.value)">
+                                <option value="all">All Regions</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div id="transferTeamNeedsList" class="transfer-needs-grid"></div>
+                </div>
+
+                <div data-transfer-panel="proposals" class="transfer-market-panel hidden">
+                    <div class="section-heading-row">
+                        <div>
+                            <span class="card-kicker">Negotiation Centre</span>
+                            <h3>Transfer Proposals</h3>
+                            <p>Approve, reject, delay, edit, or block negotiations. Every proposal includes projected rosters and a suitability breakdown.</p>
+                        </div>
+                        <div class="section-heading-actions">
+                            <select id="transferProposalFilter" onchange="setTransferProposalFilter(this.value)">
+                                <option value="pending">Pending</option>
+                                <option value="approved">Approved</option>
+                                <option value="rejected">Rejected</option>
+                                <option value="all">All</option>
+                            </select>
+                            <button class="primary-button" onclick="generateNextTransferDay()">Generate Next Day</button>
+                            <button class="secondary-button" onclick="clearTransferSuggestions()">Clear Pending</button>
+                        </div>
+                    </div>
+                    <div id="transferProposalList" class="transfer-proposal-list"></div>
+                    <div id="automaticTransferSuggestionList" class="hidden"></div>
+                </div>
+
+                <div data-transfer-panel="freeAgents" class="transfer-market-panel hidden">
+                    <div class="transfer-two-column">
+                        <div class="team-form-card">
+                            <span class="card-kicker">Scouting</span>
+                            <h3>Create Free Agent</h3>
+                            <label>Player Name</label>
+                            <input id="freeAgentName" placeholder="Free-agent name">
+                            <label>Player Rating</label>
+                            <input id="freeAgentRating" type="number" min="1" max="100" placeholder="1-100">
+                            <label>Region</label>
+                            <select id="freeAgentRegion">
+                                <option value="">Open to all regions</option>
+                                <option value="EU">EU</option>
+                                <option value="NA">NA</option>
+                                <option value="SAM">SAM</option>
+                                <option value="MENA">MENA</option>
+                                <option value="OCE">OCE</option>
+                                <option value="APAC">APAC</option>
+                                <option value="SSA">SSA</option>
+                            </select>
+                            <button class="primary-button" onclick="addFreeAgent()">Add Free Agent</button>
+                        </div>
+
+                        <div class="team-form-card">
+                            <span class="card-kicker">Manual Signing</span>
+                            <h3>Sign Free Agent</h3>
+                            <p class="small">The replaced player enters free agency and both team form and chemistry reset.</p>
+                            <label>Free Agent</label>
+                            <select id="freeAgentSelect"></select>
+                            <label>Signing Team</label>
+                            <select id="freeAgentTeam" onchange="updateFreeAgentReplacementOptions()"></select>
+                            <label>Player Being Replaced</label>
+                            <select id="freeAgentReplacePlayer"></select>
+                            <button class="primary-button" onclick="signFreeAgent()">Complete Signing</button>
+                        </div>
+                    </div>
+
+                    <div class="team-form-card">
+                        <div class="section-heading-row"><div><span class="card-kicker">Available Talent</span><h3>Free-Agent Pool</h3></div></div>
+                        <div id="freeAgentList"></div>
+                    </div>
+                </div>
+
+                <div data-transfer-panel="development" class="transfer-market-panel hidden">
+                    <div class="team-form-card career-system-card">
+                        <div class="career-system-heading">
+                            <div>
+                                <span>Player Progression</span>
+                                <h3>Player Development</h3>
+                                <p>Review performance-based rating movement between splits or seasons before applying it.</p>
+                            </div>
+                            <button type="button" class="primary-button" onclick="createPlayerDevelopmentReview()">Run Review</button>
+                        </div>
+
+                        <div class="career-settings-grid">
+                            <label class="career-check-row"><input id="careerAutoGenerateTransfers" type="checkbox" checked><span>Start market activity after a completed split</span></label>
+                            <label>Initial proposals<select id="careerTransferSuggestionCount"><option value="3">3</option><option value="6" selected>6</option><option value="9">9</option><option value="12">12</option></select></label>
+                            <label class="career-check-row"><input id="careerDevelopmentEnabled" type="checkbox" checked><span>Enable player development</span></label>
+                            <label>Development timing<select id="careerDevelopmentTiming"><option value="manual">Manual only</option><option value="afterSplit" selected>After each split</option><option value="afterSeason">After each season</option></select></label>
+                            <label>Volatility<select id="careerDevelopmentVolatility"><option value="conservative">Conservative</option><option value="balanced" selected>Balanced</option><option value="dynamic">Dynamic</option></select></label>
+                            <label>Maximum rating change<select id="careerDevelopmentMaxChange"><option value="1">±1</option><option value="2" selected>±2</option><option value="3">±3</option><option value="4">±4</option></select></label>
+                            <label class="career-check-row"><input id="careerDevelopmentAutoApply" type="checkbox"><span>Automatically apply reviews</span></label>
+                        </div>
+
+                        <button type="button" class="secondary-button" onclick="saveCareerSettingsFromForm()">Save Development Settings</button>
+                        <div id="playerDevelopmentReview" class="player-development-review"></div>
+                        <div class="development-history-panel"><h4>Recent Development Reviews</h4><div id="playerDevelopmentHistory"></div></div>
+                    </div>
+                </div>
+
+                <div data-transfer-panel="history" class="transfer-market-panel hidden">
+                    <div class="team-form-card">
+                        <span class="card-kicker">Manual Move</span>
+                        <h3>Player Trade</h3>
+                        <p class="small">Swap one player between two teams while preserving complete three-player rosters.</p>
+                        <div class="transfer-grid">
+                            <div><label>Source Team</label><select id="tradeSourceTeam" onchange="updateTradePlayerOptions()"></select></div>
+                            <div><label>Source Player</label><select id="tradeSourcePlayer"></select></div>
+                            <div><label>Destination Team</label><select id="tradeDestinationTeam" onchange="updateTradePlayerOptions()"></select></div>
+                            <div><label>Destination Player</label><select id="tradeDestinationPlayer"></select></div>
+                        </div>
+                        <button class="primary-button" onclick="executePlayerTrade()">Complete Player Trade</button>
+                    </div>
+
+                    <div class="team-form-card">
+                        <div class="section-heading-row">
+                            <div><span class="card-kicker">League Record</span><h3>Transaction History</h3></div>
+                            <button class="danger-button" onclick="clearTransferHistory()">Clear History</button>
+                        </div>
+                        <div id="transferHistoryList"></div>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- SHEEP ESPORTS -->
+
+            <section id="journalistPage" class="page hidden sheep-page">
+                <div class="sheep-masthead">
+                    <div class="sheep-brand-block">
+                        <span class="sheep-logo-mark">S</span>
+                        <div>
+                            <span class="sheep-brand-kicker">Transfer Journalism</span>
+                            <h2>Sheep Esports</h2>
+                            <p>Rumours, negotiation updates, confirmed roster moves, and transfer-window analysis.</p>
+                        </div>
+                    </div>
+                    <div class="page-header-actions">
+                        <button class="secondary-button" onclick="showPage('transfers')">Open Transfer Market</button>
+                    </div>
+                </div>
+
+                <div id="sheepDeskStats" class="sheep-desk-stats"></div>
+
+                <div class="sheep-tabs">
+                    <button class="active" data-sheep-tab="latest" onclick="showSheepTab('latest')">Latest</button>
+                    <button data-sheep-tab="rumours" onclick="showSheepTab('rumours')">Rumours</button>
+                    <button data-sheep-tab="confirmed" onclick="showSheepTab('confirmed')">Confirmed</button>
+                    <button data-sheep-tab="sources" onclick="showSheepTab('sources')">Sources</button>
+                </div>
+
+                <div id="sheepFeedPanel">
+                    <div class="sheep-filter-bar">
+                        <input id="sheepSearch" placeholder="Search teams, players, or reports..." oninput="setSheepSearch(this.value)">
+                        <select id="sheepRegionFilter" onchange="setSheepRegionFilter(this.value)"><option value="all">All Regions</option></select>
+                        <select id="sheepConfidenceFilter" onchange="setSheepConfidenceFilter(this.value)"><option value="all">All Confidence</option><option value="high">High 75%+</option><option value="medium">Medium 45-74%</option><option value="low">Low under 45%</option></select>
+                    </div>
+
+                    <div id="sheepTopStory"></div>
+
+                    <div class="sheep-content-grid">
+                        <div id="sheepFeed" class="sheep-feed"></div>
+                        <aside class="team-form-card sheep-manual-desk">
+                            <span class="card-kicker">Journalist Desk</span>
+                            <h3>Publish Manual Rumour</h3>
+                            <label>Headline<input id="sheepManualHeadline" placeholder="Sources: Player linked with Team"></label>
+                            <label>Report<textarea id="sheepManualSummary" rows="5" placeholder="What are your sources reporting?"></textarea></label>
+                            <label>Region<select id="sheepManualRegion"><option value="Global">Global</option><option value="EU">EU</option><option value="NA">NA</option><option value="SAM">SAM</option><option value="MENA">MENA</option><option value="OCE">OCE</option><option value="APAC">APAC</option><option value="SSA">SSA</option><option value="International">International</option></select></label>
+                            <label>Confidence<input id="sheepManualConfidence" type="number" min="1" max="99" value="50"></label>
+                            <label>Source<select id="sheepManualSource"><option value="source-team">Team-side source</option><option value="source-player">Player camp</option><option value="source-regional">Regional contact</option><option value="source-market">Market source</option><option value="source-community">Community report</option></select></label>
+                            <button class="primary-button" onclick="publishManualSheepRumour()">Publish Report</button>
+                        </aside>
+                    </div>
+                </div>
+
+                <div id="sheepSourcesPanel" class="hidden">
+                    <div class="section-heading-row"><div><span class="card-kicker">Source Guide</span><h3>Reliability Tiers</h3><p>Every report identifies how close the information is to the negotiation.</p></div></div>
+                    <div id="sheepSourceList" class="sheep-source-grid"></div>
+                </div>
+            </section>
+
+            <!-- EVENTS -->
+
+            <section id="tournamentPage"
+                class="page hidden events-page">
+
+                <div class="page-header events-page-header">
+                    <div>
+                        <h2>Events</h2>
+                        <p>
+                            Build an event, follow the active tournament, and review completed results from one workspace.
+                        </p>
+                    </div>
+
+                    <div id="eventPageStatus"
+                        class="event-page-status">
+                        <span class="event-status-dot"></span>
+                        <span>No active event</span>
+                    </div>
+                </div>
+
+                <div id="nextSeasonEventShortcut"
+                    class="next-season-event-shortcut hidden">
+                </div>
+
+                <div class="events-workspace-tabs"
+                    role="tablist"
+                    aria-label="Events workspace">
+
+                    <button type="button"
+                        class="events-workspace-tab active"
+                        data-event-tab="create"
+                        onclick="showEventWorkspaceTab('create')">
+                        <span class="events-tab-icon">＋</span>
+                        Create Event
+                    </button>
+
+                    <button type="button"
+                        class="events-workspace-tab"
+                        data-event-tab="active"
+                        onclick="showEventWorkspaceTab('active')">
+                        <span class="events-tab-icon">▶</span>
+                        Active Event
+                        <span id="activeEventTabBadge"
+                            class="events-tab-badge hidden">Live</span>
+                    </button>
+
+                    <button type="button"
+                        class="events-workspace-tab"
+                        data-event-tab="completed"
+                        onclick="showEventWorkspaceTab('completed')">
+                        <span class="events-tab-icon">✓</span>
+                        Completed Events
+                        <span id="completedEventCount"
+                            class="events-tab-count">0</span>
+                    </button>
+
+                </div>
+
+                <!-- CREATE EVENT WORKSPACE -->
+
+                <div id="eventWorkspaceCreate"
+                    class="event-workspace-panel">
+
+                    <div class="event-create-layout">
+
+                        <div class="event-create-main">
+
+                            <div id="eventCreatorPanel"
+                                class="tournament-panel events-flat-panel open">
+
+                                <div class="tournament-panel-body">
+
+                                    <div class="event-section-card event-preset-card">
+                                        <div class="event-section-heading">
+                                            <div>
+                                                <span class="event-step-number">1</span>
+                                                <div>
+                                                    <h3>Choose an Event Preset</h3>
+                                                    <p>Start with a common event setup, then adjust anything you need.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="event-preset-grid">
+                                            <button type="button"
+                                                class="event-preset-button active"
+                                                data-event-preset="regional"
+                                                onclick="applyEventPreset('regional')">
+                                                <strong>Regional</strong>
+                                                <span>Regional teams and split points</span>
+                                            </button>
+
+                                            <button type="button"
+                                                class="event-preset-button"
+                                                data-event-preset="major"
+                                                onclick="applyEventPreset('major')">
+                                                <strong>Major</strong>
+                                                <span>Global LAN with qualified teams</span>
+                                            </button>
+
+                                            <button type="button"
+                                                class="event-preset-button"
+                                                data-event-preset="worlds"
+                                                onclick="applyEventPreset('worlds')">
+                                                <strong>Worlds</strong>
+                                                <span>Season-ending world championship</span>
+                                            </button>
+
+                                            <button type="button"
+                                                class="event-preset-button"
+                                                data-event-preset="lcq"
+                                                onclick="applyEventPreset('lcq')">
+                                                <strong>Regional LCQ</strong>
+                                                <span>Six teams fight for one Play-In spot</span>
+                                            </button>
+
+                                            <button type="button"
+                                                class="event-preset-button"
+                                                data-event-preset="playin"
+                                                onclick="applyEventPreset('playin')">
+                                                <strong>Worlds Play-In</strong>
+                                                <span>Eight teams fight for four Main Event spots</span>
+                                            </button>
+
+                                            <button type="button"
+                                                class="event-preset-button"
+                                                data-event-preset="custom"
+                                                onclick="applyEventPreset('custom')">
+                                                <strong>Custom</strong>
+                                                <span>Build a standalone tournament</span>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="event-section-card">
+                                        <div class="event-section-heading">
+                                            <div>
+                                                <span class="event-step-number">2</span>
+                                                <div>
+                                                    <h3>Event Details</h3>
+                                                    <p>Name the event and connect it to the correct split and region.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="event-details-grid">
+                                            <div class="event-field event-field-wide">
+                                                <label for="eventName">Event Name</label>
+                                                <input id="eventName"
+                                                    placeholder="Example: EU Regional 1">
+                                            </div>
+
+                                            <div class="event-field">
+                                                <label for="eventType">Event Type</label>
+                                                <select id="eventType"
+                                                    onchange="handleEventSettingsChanged()">
+                                                    <option value="regional">Regional</option>
+                                                    <option value="major">LAN / Major</option>
+                                                    <option value="worlds">World Championship</option>
+                                                    <option value="playin">Worlds Play-In</option>
+                                                    <option value="lcq">Regional Worlds LCQ</option>
+                                                    <option value="custom">Custom Event</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="event-field">
+                                                <label for="eventSplit">Split</label>
+                                                <select id="eventSplit">
+                                                    <option value="1">Split 1</option>
+                                                    <option value="2">Split 2</option>
+                                                    <option value="3">Split 3</option>
+                                                </select>
+                                            </div>
+
+                                            <input id="eventSplitEventNumber"
+                                                type="hidden"
+                                                value="">
+
+                                            <div class="event-field">
+                                                <label for="eventRegion">Region</label>
+                                                <select id="eventRegion"
+                                                    onchange="handleEventSettingsChanged()">
+                                                    <option value="NA">North America</option>
+                                                    <option value="EU">Europe</option>
+                                                    <option value="SAM">South America</option>
+                                                    <option value="MENA">MENA</option>
+                                                    <option value="OCE">Oceania</option>
+                                                    <option value="APAC">APAC</option>
+                                                    <option value="SSA">SSA</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="event-section-card">
+                                        <div class="event-section-heading">
+                                            <div>
+                                                <span class="event-step-number">3</span>
+                                                <div>
+                                                    <h3>Tournament Format</h3>
+                                                    <p>Select a format card. Only formats valid for this event type are available.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <select id="tournamentFormat"
+                                            class="event-hidden-control"
+                                            aria-hidden="true"
+                                            tabindex="-1"
+                                            onchange="handleEventSettingsChanged()">
+                                            <option value="roundRobin">Round Robin</option>
+                                            <option value="playoffs">Single Elimination</option>
+                                            <option value="swiss">Swiss Stage</option>
+                                            <option value="swissPlayoffs">Swiss + Playoffs</option>
+                                            <option value="groupsHybrid">Groups + Hybrid Playoffs</option>
+                                            <option value="groupsDoubleElim">Groups + Double-Elim Playoffs</option>
+                                            <option value="doubleElim">Double Elimination</option>
+                                            <option value="regionalLcq">Regional Worlds LCQ</option>
+                                            <option value="worldsPlayIn">Worlds Play-In</option>
+                                            <option value="custom">Custom Bracket</option>
+                                        </select>
+
+                                        <div id="eventFormatCards"
+                                            class="event-format-grid">
+                                        </div>
+
+                                        <div class="event-series-card">
+                                            <div id="defaultSeriesSetting"
+                                                class="event-field">
+                                                <label for="seriesFormat">Series Format</label>
+                                                <select id="seriesFormat">
+                                                    <option value="3">Best of 3</option>
+                                                    <option value="5" selected>Best of 5</option>
+                                                    <option value="7">Best of 7</option>
+                                                </select>
+                                            </div>
+
+                                            <div id="stageSeriesSettings"
+                                                class="stage-series-settings hidden">
+                                                <div class="event-stage-series-grid">
+                                                    <div class="event-field">
+                                                        <label for="swissSeriesFormat">
+                                                            <span id="openingStageSeriesLabel">Swiss Stage Series</span>
+                                                        </label>
+                                                        <select id="swissSeriesFormat">
+                                                            <option value="3">Best of 3</option>
+                                                            <option value="5" selected>Best of 5</option>
+                                                            <option value="7">Best of 7</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="event-field">
+                                                        <label for="playoffSeriesFormat">Playoff Series</label>
+                                                        <select id="playoffSeriesFormat">
+                                                            <option value="3">Best of 3</option>
+                                                            <option value="5">Best of 5</option>
+                                                            <option value="7" selected>Best of 7</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div id="customBracketSettings"
+                                            class="custom-bracket-settings hidden">
+                                            <h4>Custom Bracket Settings</h4>
+
+                                            <div class="event-details-grid">
+                                                <div class="event-field">
+                                                    <label for="customBracketSize">Bracket Size</label>
+                                                    <select id="customBracketSize">
+                                                        <option value="4">4 Teams</option>
+                                                        <option value="8" selected>8 Teams</option>
+                                                        <option value="16">16 Teams</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="event-field">
+                                                    <label for="customBaseFormat">Base Format</label>
+                                                    <select id="customBaseFormat">
+                                                        <option value="playoffs">Single Elimination</option>
+                                                        <option value="doubleElim">Double Elimination</option>
+                                                        <option value="swissPlayoffs">Swiss + Playoffs</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="event-field">
+                                                    <label for="customSeedingMethod">Seeding Method</label>
+                                                    <select id="customSeedingMethod">
+                                                        <option value="manual">Manual Seedings</option>
+                                                        <option value="rating">By Rating</option>
+                                                        <option value="leaguePoints">By League Points</option>
+                                                        <option value="random">Random</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div id="setupPanel"
+                                class="tournament-panel events-flat-panel open">
+
+                                <div class="tournament-panel-body">
+                                    <div class="event-section-card event-team-section">
+                                        <div class="event-section-heading event-team-heading">
+                                            <div>
+                                                <span class="event-step-number">4</span>
+                                                <div>
+                                                    <h3>Select Teams</h3>
+                                                    <p>Choose the field, then fine-tune the seed order before starting.</p>
+                                                </div>
+                                            </div>
+
+                                            <div id="eventSelectedTeamCount"
+                                                class="event-selected-counter">
+                                                0 selected
+                                            </div>
+                                        </div>
+
+                                        <div class="event-team-toolbar">
+                                            <input id="eventTeamSearch"
+                                                type="search"
+                                                placeholder="Search eligible teams or players..."
+                                                oninput="renderTournamentTeams()">
+
+                                            <select id="eventTeamSort"
+                                                onchange="renderTournamentTeams()">
+                                                <option value="rating">Highest Rating</option>
+                                                <option value="name">Team Name</option>
+                                                <option value="region">Region</option>
+                                            </select>
+
+                                            <button type="button"
+                                                class="secondary-button compact-button"
+                                                onclick="selectTopRatedEventTeams()">
+                                                Select Recommended
+                                            </button>
+
+                                            <button type="button"
+                                                class="secondary-button compact-button"
+                                                onclick="selectAllEligibleEventTeams()">
+                                                Select All
+                                            </button>
+
+                                            <button type="button"
+                                                class="secondary-button compact-button"
+                                                onclick="clearEventTeamSelection()">
+                                                Clear
+                                            </button>
+                                        </div>
+
+                                        <div id="tournamentTeams"
+                                            class="event-team-picker">
+                                        </div>
+
+                                        <details class="event-seeding-details" open>
+                                            <summary>
+                                                <span>Team Seedings</span>
+                                                <small>Drag is not required — use the arrow buttons to reorder.</small>
+                                            </summary>
+
+                                            <div class="seeding-panel">
+                                                <div id="seedingList"></div>
+
+                                                <div id="seedingMatchupPreview"
+                                                    class="seeding-matchup-preview">
+                                                </div>
+                                            </div>
+                                        </details>
+
+                                        <div class="event-start-bar">
+                                            <div>
+                                                <div id="eventValidationMessage"
+                                                    class="event-validation-message">
+                                                    Choose an event setup and select teams.
+                                                </div>
+                                                <span id="eventStartHint"
+                                                    class="small">
+                                                    The event cannot start until all requirements are met.
+                                                </span>
+                                            </div>
+
+                                            <button id="startEventButton"
+                                                class="primary-button event-start-button"
+                                                onclick="createEventAndStartTournament()">
+                                                Start Event
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <aside class="event-create-sidebar">
+                            <div class="event-preview-sticky">
+                                <div class="event-sidebar-label">Live Preview</div>
+                                <div id="currentEventPreview"
+                                    class="event-preview-card">
+                                </div>
+
+                                <div class="event-sidebar-help">
+                                    <h4>Quick workflow</h4>
+                                    <ol>
+                                        <li>Pick a preset.</li>
+                                        <li>Choose the format.</li>
+                                        <li>Select the teams.</li>
+                                        <li>Review seedings and start.</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </aside>
+
+                    </div>
+                </div>
+
+                <!-- ACTIVE EVENT WORKSPACE -->
+
+                <div id="eventWorkspaceActive"
+                    class="event-workspace-panel hidden">
+
+                    <div id="activeEventEmptyState"
+                        class="event-empty-state">
+                        <div class="event-empty-icon">▶</div>
+                        <h3>No event has been started yet</h3>
+                        <p>Create an event or load the next event from Season Mode.</p>
+                        <button type="button"
+                            class="primary-button"
+                            onclick="showEventWorkspaceTab('create')">
+                            Create an Event
+                        </button>
+                    </div>
+
+                    <div id="activeEventDashboard"
+                        class="hidden">
+
+                        <div id="activeEventSummary"
+                            class="active-event-summary">
+                        </div>
+
+                        <div class="active-event-view-tabs"
+                            role="tablist"
+                            aria-label="Active event views">
+                            <button type="button"
+                                class="active-event-view-tab active"
+                                data-active-event-view="overview"
+                                onclick="showActiveEventView('overview')">
+                                Overview
+                            </button>
+                            <button type="button"
+                                class="active-event-view-tab"
+                                data-active-event-view="matches"
+                                onclick="showActiveEventView('matches')">
+                                Matches
+                            </button>
+                            <button type="button"
+                                class="active-event-view-tab"
+                                data-active-event-view="standings"
+                                onclick="showActiveEventView('standings')">
+                                Standings
+                            </button>
+                            <button type="button"
+                                class="active-event-view-tab"
+                                data-active-event-view="bracket"
+                                onclick="showActiveEventView('bracket')">
+                                Bracket
+                            </button>
+                            <button type="button"
+                                class="active-event-view-tab"
+                                data-active-event-view="stats"
+                                onclick="showActiveEventView('stats')">
+                                Player Stats
+                            </button>
+                        </div>
+
+                        <div id="activeEventViewOverview"
+                            class="active-event-view-panel">
+                            <div id="activeEventOverview"
+                                class="active-event-overview-grid">
+                            </div>
+
+                            <div id="manualResultControl"
+                                class="active-event-manual-control hidden"></div>
+                        </div>
+
+                        <div id="activeEventViewMatches"
+                            class="active-event-view-panel hidden">
+                            <div id="matchFeedPanel"
+                                class="tournament-panel events-flat-panel open">
+                                <div class="tournament-panel-body">
+                                    <div class="event-results-card">
+                                        <div class="event-results-heading">
+                                            <h3>Match Feed</h3>
+                                            <span>Newest results appear as the event runs.</span>
+                                        </div>
+                                        <div id="matchFeed"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="activeEventViewStandings"
+                            class="active-event-view-panel hidden">
+                            <div id="standingsPanel"
+                                class="tournament-panel events-flat-panel open">
+                                <div class="tournament-panel-body">
+                                    <div class="event-results-card">
+                                        <div class="event-results-heading">
+                                            <h3>Standings</h3>
+                                            <span>Current event standings and records.</span>
+                                        </div>
+                                        <div id="standings"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="activeEventViewBracket"
+                            class="active-event-view-panel hidden">
+                            <div id="bracketPanel"
+                                class="tournament-panel events-flat-panel open">
+                                <div class="tournament-panel-body">
+                                    <div class="event-results-card event-bracket-card">
+                                        <div class="event-results-heading">
+                                            <h3>Bracket</h3>
+                                            <span>The bracket updates after each completed series.</span>
+                                        </div>
+                                        <div id="bracketContainer"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="activeEventViewStats"
+                            class="active-event-view-panel hidden">
+                            <div id="playerStatsPanel"
+                                class="tournament-panel events-flat-panel open">
+                                <div class="tournament-panel-body">
+                                    <div class="event-results-card">
+                                        <div class="event-results-heading">
+                                            <h3>Player Statistics</h3>
+                                            <span>Individual performances from the current event.</span>
+                                        </div>
+                                        <div id="playerStats"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- COMPLETED EVENTS WORKSPACE -->
+
+                <div id="eventWorkspaceCompleted"
+                    class="event-workspace-panel hidden">
+
+                    <div class="completed-events-toolbar">
+                        <div class="completed-events-search">
+                            <label for="eventHistorySearch">Search Events</label>
+                            <input id="eventHistorySearch"
+                                type="search"
+                                placeholder="Search event, champion, or region..."
+                                oninput="renderEventsCompletedList()">
+                        </div>
+
+                        <div>
+                            <label for="eventHistoryTypeFilter">Event Type</label>
+                            <select id="eventHistoryTypeFilter"
+                                onchange="renderEventsCompletedList()">
+                                <option value="ALL">All Types</option>
+                                <option value="regional">Regionals</option>
+                                <option value="major">Majors</option>
+                                <option value="worlds">Worlds Main Event</option>
+                                <option value="playin">Worlds Play-In</option>
+                                <option value="lcq">Regional LCQs</option>
+                                <option value="custom">Custom Events</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="eventHistoryRegionFilter">Region</label>
+                            <select id="eventHistoryRegionFilter"
+                                onchange="renderEventsCompletedList()">
+                                <option value="ALL">All Regions</option>
+                                <option value="NA">NA</option>
+                                <option value="EU">EU</option>
+                                <option value="SAM">SAM</option>
+                                <option value="MENA">MENA</option>
+                                <option value="OCE">OCE</option>
+                                <option value="APAC">APAC</option>
+                                <option value="SSA">SSA</option>
+                                <option value="GLOBAL">Global</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="eventHistorySplitFilter">Split</label>
+                            <select id="eventHistorySplitFilter"
+                                onchange="renderEventsCompletedList()">
+                                <option value="ALL">All Splits</option>
+                                <option value="1">Split 1</option>
+                                <option value="2">Split 2</option>
+                                <option value="3">Split 3</option>
+                                <option value="season">Season Finals</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="completed-events-heading">
+                        <div>
+                            <h3>Completed Events</h3>
+                            <p>Search recent champions and jump to the full History page for detailed placements.</p>
+                        </div>
+
+                        <button type="button"
+                            class="secondary-button"
+                            onclick="showPage('history')">
+                            Open Full History
+                        </button>
+                    </div>
+
+                    <div id="eventsCompletedList"
+                        class="events-completed-grid">
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- SIMULATION LAB -->
+
+            <section id="simulationLabPage"
+                class="page hidden simulation-lab-page">
+
+                <div class="page-header simulation-lab-header">
+                    <div>
+                        <span class="dashboard-page-kicker">Phase 4</span>
+                        <h2>Simulation Laboratory</h2>
+                        <p>Test ratings, tournament form, chemistry, and series formats without changing league data.</p>
+                    </div>
+
+                    <button type="button"
+                        class="secondary-button"
+                        onclick="swapSimulationLabTeams()">
+                        Swap Teams
+                    </button>
+                </div>
+
+                <div class="simulation-lab-layout">
+                    <div class="team-form-card simulation-lab-controls">
+                        <h3>Test Setup</h3>
+
+                        <label>Team A</label>
+                        <select id="simulationLabTeamA"
+                            onchange="renderSimulationLabTeamBreakdowns()"></select>
+
+                        <label>Team B</label>
+                        <select id="simulationLabTeamB"
+                            onchange="renderSimulationLabTeamBreakdowns()"></select>
+
+                        <div class="simulation-lab-control-grid">
+                            <label>
+                                Series
+                                <select id="simulationLabSeries">
+                                    <option value="3">BO3</option>
+                                    <option value="5">BO5</option>
+                                    <option value="7" selected>BO7</option>
+                                </select>
+                            </label>
+
+                            <label>
+                                Simulations
+                                <select id="simulationLabRuns">
+                                    <option value="100">100</option>
+                                    <option value="1000" selected>1,000</option>
+                                    <option value="5000">5,000</option>
+                                    <option value="10000">10,000</option>
+                                </select>
+                            </label>
+                        </div>
+
+                        <label class="career-check-row">
+                            <input id="simulationLabUseForm"
+                                type="checkbox" checked
+                                onchange="renderSimulationLabTeamBreakdowns()">
+                            <span>Include current and previous tournament form</span>
+                        </label>
+
+                        <label class="career-check-row">
+                            <input id="simulationLabUseChemistry"
+                                type="checkbox" checked
+                                onchange="renderSimulationLabTeamBreakdowns()">
+                            <span>Include roster chemistry</span>
+                        </label>
+
+                        <button type="button"
+                            class="primary-button simulation-lab-run"
+                            onclick="runSimulationLaboratory()">
+                            Run Simulation Test
+                        </button>
+
+                        <p class="small">Laboratory runs do not alter form, chemistry, player statistics, History, or Season progress.</p>
+                    </div>
+
+                    <div class="simulation-lab-main">
+                        <div id="simulationLabBreakdown"
+                            class="simulation-lab-breakdown"></div>
+
+                        <div id="simulationLabResults"
+                            class="team-form-card simulation-lab-results">
+                            <div class="career-empty-state">
+                                <strong>No test run yet</strong>
+                                <span>Choose two teams and run a batch of simulated series.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- LEAGUE TABLE -->
+
+            <section id="leaguePage"
+                class="page hidden">
+
+                <div class="page-header">
+
+                    <h2>League Standings</h2>
+
+                    <p>
+                        View overall and split standings, Major performance,
+                        Worlds qualification, team form and points movement.
+                    </p>
+
+                </div>
+
+                <div id="leagueDashboard"></div>
+
+            </section>
+
+            <!-- TEAM HUB -->
+
+            <section id="profilesPage" class="page hidden">
+
+                <div class="page-header team-hub-page-header">
+                    <div>
+                        <span class="teams-page-kicker">Organisation Centre</span>
+                        <h2>Team Hub</h2>
+                        <p>Open a team to review its roster, form, results, transfers, development and long-term history.</p>
+                    </div>
+
+                    <div class="team-hub-header-actions">
+                        <button class="secondary-button" onclick="showPage('teams'); showTeamsTab('library')">Team Library</button>
+                        <button class="primary-button" onclick="showPage('teams'); openNewTeamCreator()">Create Team</button>
+                    </div>
+                </div>
+
+                <div class="team-hub-selector">
+                    <label>
+                        Region
+                        <select id="profileRegionFilter" onchange="renderTeamProfileSelector()">
+                            <option value="ALL">All Regions</option>
+                            <option value="NA">North America</option><option value="EU">Europe</option>
+                            <option value="SAM">South America</option><option value="MENA">MENA</option>
+                            <option value="OCE">Oceania</option><option value="APAC">APAC</option>
+                            <option value="SSA">SSA</option>
+                        </select>
+                    </label>
+
+                    <label class="team-hub-team-select">
+                        Team
+                        <select id="profileTeamSelect" onchange="renderSelectedTeamProfile()"></select>
+                    </label>
+
+                    <button class="secondary-button" onclick="openSelectedTeamInEditor()">Edit Team</button>
+                </div>
+
+                <div id="teamProfileView"></div>
+
+            </section>
+            <!-- QUALIFICATION HUB -->
+
+            <section id="lansPage" class="page hidden">
+                <div class="page-header qualification-page-header">
+                    <div>
+                        <span class="page-kicker">Competition Pathways</span>
+                        <h2>Qualification Hub</h2>
+                        <p>Track Major qualification, Worlds automatic places, Regional LCQs and the Worlds Play-In from one page.</p>
+                    </div>
+                    <button class="secondary-button" onclick="showPage('rules')">Competition Rules</button>
+                </div>
+
+                <div class="hub-tab-bar qualification-tabs">
+                    <button class="hub-tab active" data-qualification-tab="overview" onclick="showQualificationTab('overview')">Overview</button>
+                    <button class="hub-tab" data-qualification-tab="major" onclick="showQualificationTab('major')">Major Race</button>
+                    <button class="hub-tab" data-qualification-tab="worlds" onclick="showQualificationTab('worlds')">Worlds Race</button>
+                    <button class="hub-tab" data-qualification-tab="lcq" onclick="showQualificationTab('lcq')">Regional LCQs</button>
+                    <button class="hub-tab" data-qualification-tab="playin" onclick="showQualificationTab('playin')">Play-In</button>
+                    <button class="hub-tab" data-qualification-tab="manual" onclick="showQualificationTab('manual')">Manual Builder</button>
+                </div>
+
+                <div id="qualificationOverviewPanel" class="qualification-tab-panel"></div>
+                <div id="qualificationMajorPanel" class="qualification-tab-panel hidden"></div>
+                <div id="qualificationWorldsPanel" class="qualification-tab-panel hidden"></div>
+                <div id="qualificationLcqPanel" class="qualification-tab-panel hidden"></div>
+                <div id="qualificationPlayInPanel" class="qualification-tab-panel hidden"></div>
+
+                <div id="qualificationManualPanel" class="qualification-tab-panel hidden">
+                    <div class="team-form-card qualification-manual-card">
+                        <div class="section-heading-row">
+                            <div>
+                                <h3>Manual Qualification Builder</h3>
+                                <p class="small">Preview or create a Major/Worlds field using custom regional slot totals.</p>
+                            </div>
+                        </div>
+
+                        <div class="event-creator-grid">
+                            <div><label>LAN Name</label><input id="lanName" placeholder="Example: RLCS Major 1"></div>
+                            <div><label>LAN Type</label><select id="lanType" onchange="renderLanQualification()"><option value="major">LAN / Major</option><option value="worlds">World Championship</option></select></div>
+                            <div><label>Qualification Split</label><select id="lanSplitFilter" onchange="renderLanQualification()"><option value="1">Split 1</option><option value="2">Split 2</option><option value="3">Split 3</option><option value="4">Split 4</option><option value="all">Full Season</option></select></div>
+                        </div>
+
+                        <div class="lan-slots-grid">
+                            <div><label>Wildcard Slots</label><input id="slotWildcard" type="number" min="0" value="1"></div>
+                            <div><label>NA Slots</label><input id="slotNA" type="number" min="0" value="4"></div>
+                            <div><label>EU Slots</label><input id="slotEU" type="number" min="0" value="4"></div>
+                            <div><label>SAM Slots</label><input id="slotSAM" type="number" min="0" value="2"></div>
+                            <div><label>MENA Slots</label><input id="slotMENA" type="number" min="0" value="2"></div>
+                            <div><label>OCE Slots</label><input id="slotOCE" type="number" min="0" value="1"></div>
+                            <div><label>APAC Slots</label><input id="slotAPAC" type="number" min="0" value="1"></div>
+                            <div><label>SSA Slots</label><input id="slotSSA" type="number" min="0" value="1"></div>
+                        </div>
+
+                        <div id="lanPresetControls" class="lan-preset-controls">
+                            <div class="settings-actions">
+                                <button class="secondary-button" onclick="applyLanPreset('major')">Apply Major Preset</button>
+                                <button class="secondary-button" onclick="applyLanPreset('worlds')">Apply Worlds Preset</button>
+                                <button class="primary-button" onclick="renderLanQualification()">Preview Teams</button>
+                                <button class="primary-button" onclick="createLanEventFromQualifiedTeams()">Create Event</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="team-form-card"><h3>Manual Preview</h3><div id="lanQualifiedTeams"></div></div>
+                </div>
+            </section>
+
+<section id="seasonPage" class="page hidden">
+    <div class="page-header season-page-header-v3">
+        <div>
+            <span class="page-kicker">League Calendar</span>
+            <h2>Season</h2>
+            <p>Run the calendar, resolve qualification ties, manage season settings and preserve completed seasons.</p>
+        </div>
+        <button class="primary-button" onclick="loadNextSeasonEvent()">Continue Season</button>
+    </div>
+
+    <div class="hub-tab-bar season-tabs">
+        <button class="hub-tab active" data-season-tab="calendar" onclick="showSeasonTab('calendar')">Calendar</button>
+        <button class="hub-tab" data-season-tab="qualification" onclick="showSeasonTab('qualification')">Qualification</button>
+        <button class="hub-tab" data-season-tab="tiebreakers" onclick="showSeasonTab('tiebreakers')">Tiebreakers</button>
+        <button class="hub-tab" data-season-tab="setup" onclick="showSeasonTab('setup')">Season Setup</button>
+        <button class="hub-tab" data-season-tab="archives" onclick="showSeasonTab('archives')">Archives</button>
+    </div>
+
+    <div id="seasonCalendarTab" class="season-tab-panel">
+        <div class="season-calendar-toolbar team-form-card compact-card">
+            <div class="season-calendar-filter-group">
+                <button class="season-filter active" data-season-filter="all" onclick="setSeasonCalendarFilter('all')">All</button>
+                <button class="season-filter" data-season-filter="current" onclick="setSeasonCalendarFilter('current')">Current Split</button>
+                <button class="season-filter" data-season-filter="ready" onclick="setSeasonCalendarFilter('ready')">Ready</button>
+                <button class="season-filter" data-season-filter="locked" onclick="setSeasonCalendarFilter('locked')">Locked</button>
+                <button class="season-filter" data-season-filter="completed" onclick="setSeasonCalendarFilter('completed')">Completed</button>
+                <button class="season-filter" data-season-filter="postseason" onclick="setSeasonCalendarFilter('postseason')">Postseason</button>
+            </div>
+            <button class="secondary-button" onclick="repairSeasonProgressFromHistory()">Repair Progress</button>
+        </div>
+        <div id="seasonCalendar"></div>
+    </div>
+
+    <div id="seasonQualificationTab" class="season-tab-panel hidden">
+        <div class="team-form-card">
+            <div class="section-heading-row"><div><h3>Season Qualification Snapshot</h3><p class="small">The same live information used by the Qualification Hub.</p></div><button class="primary-button" onclick="showPage('lans')">Open Full Hub</button></div>
+            <div id="seasonQualificationSnapshot"></div>
+        </div>
+    </div>
+
+    <div id="seasonTiebreakersTab" class="season-tab-panel hidden">
+        <div class="team-form-card">
+            <div class="section-heading-row"><div><h3>Points Tiebreakers</h3><p class="small">Only ties that affect event seeding or qualification need to be resolved.</p></div></div>
+            <div id="seasonTiebreakerPanel"></div>
+        </div>
+    </div>
+
+    <div id="seasonSetupTab" class="season-tab-panel hidden">
+        <div class="season-management-card">
+            <div class="season-management-header"><div><span class="season-management-kicker">Season Lifecycle</span><h3>Season Management</h3><p>Complete and archive a season before starting the next one.</p></div><button class="secondary-button" onclick="showPage('offseason')">Open Offseason</button></div>
+            <p id="seasonArchiveStatus" class="season-archive-status">Completed seasons can be archived permanently before the next season begins.</p>
+            <div id="seasonManagementSummary"></div>
+        </div>
+
+        <div class="team-form-card">
+            <h3>Season Builder</h3>
+            <div class="event-creator-grid">
+                <div><label>Season Name</label><input id="seasonName" placeholder="Example: Season 1"></div>
+                <div><label>Number of Splits</label><select id="seasonSplitCount"><option value="1">1 Split</option><option value="2" selected>2 Splits</option><option value="3">3 Splits</option><option value="4">4 Splits</option></select></div>
+                <div><label>Regionals Per Split</label><select id="seasonRegionalsPerSplit"><option value="1">1 Regional</option><option value="2">2 Regionals</option><option value="3" selected>3 Regionals</option><option value="4">4 Regionals</option><option value="5">5 Regionals</option></select></div>
+            </div>
+            <div class="season-region-selector"><div><strong>Active Regions</strong><span>Only selected regions receive Regional events.</span></div><div class="season-region-options"><label><input type="checkbox" id="seasonRegionNA" checked> NA</label><label><input type="checkbox" id="seasonRegionEU" checked> EU</label><label><input type="checkbox" id="seasonRegionSAM" checked> SAM</label><label><input type="checkbox" id="seasonRegionMENA" checked> MENA</label><label><input type="checkbox" id="seasonRegionOCE" checked> OCE</label><label><input type="checkbox" id="seasonRegionAPAC" checked> APAC</label><label><input type="checkbox" id="seasonRegionSSA" checked> SSA</label></div></div>
+            <div class="season-builder-heading"><h4>Split Formats</h4><p class="small">Every split can use different Regional and Major formats.</p></div>
+            <div id="seasonSplitSettings" class="season-split-settings-builder"></div>
+            <div class="season-format-builder-card season-worlds-builder"><div class="season-format-builder-title"><h4>World Championship</h4><span>Season-final format settings.</span></div><div class="season-format-builder-grid"><div class="season-format-event-card">
+                <label>Format</label><select id="seasonWorldsFormat"><option value="swissPlayoffs">Swiss + Playoffs</option><option value="groupsHybrid">Groups + Hybrid Playoffs</option><option value="groupsDoubleElim" selected>Groups + Double-Elim Playoffs</option><option value="playoffs">Single Elimination</option></select>
+                <label>Default Series</label><select id="seasonWorldsSeries"><option value="3">Best of 3</option><option value="5">Best of 5</option><option value="7" selected>Best of 7</option></select>
+                <label>Swiss Series</label><select id="seasonWorldsSwissSeries"><option value="3">Best of 3</option><option value="5" selected>Best of 5</option><option value="7">Best of 7</option></select>
+                <label>Playoff Series</label><select id="seasonWorldsPlayoffSeries"><option value="3">Best of 3</option><option value="5">Best of 5</option><option value="7" selected>Best of 7</option></select>
+            </div></div></div>
+            <div class="settings-actions"><button class="primary-button" onclick="createDefaultSeason()">Create Season</button><button class="primary-button danger-button" onclick="clearSeasonCalendar()">Clear Season</button></div>
+        </div>
+    </div>
+
+    <div id="seasonArchivesTab" class="season-tab-panel hidden">
+        <div class="season-archive-card-shell">
+            <div class="season-management-header"><div><span class="season-management-kicker">Permanent League History</span><h3>Season Archives</h3><p>Final standings, champions, qualification, rosters, transfers and event summaries.</p></div></div>
+            <div class="season-archive-layout"><div id="seasonArchiveList" class="season-archive-list-column"></div><div id="seasonArchiveDetail" class="season-archive-detail"></div></div>
+        </div>
+    </div>
+</section>
+
+<section id="offseasonPage" class="page hidden">
+    <div class="page-header offseason-page-header"><div><span class="page-kicker">Between Seasons</span><h2>Offseason</h2><p>Review the completed season, develop players, manage roster moves and prepare the next campaign—without a draft.</p></div><button class="primary-button" onclick="startOffseason()">Start / Resume Offseason</button></div>
+    <div id="offseasonStatus"></div>
+    <div id="offseasonProgress" class="offseason-progress"></div>
+    <div class="offseason-grid">
+        <div class="team-form-card" id="offseasonReviewCard"></div>
+        <div class="team-form-card" id="offseasonDevelopmentCard"></div>
+        <div class="team-form-card" id="offseasonTransfersCard"></div>
+        <div class="team-form-card" id="offseasonRosterCard"></div>
+    </div>
+    <div class="team-form-card offseason-finalise-card" id="offseasonFinaliseCard"></div>
+</section>
+            <section id="historyPage" class="page hidden">
+                <div class="page-header history-v2-header">
+                    <div><span class="page-kicker">Event Archive</span><h2>History V2</h2><p>Search every completed event and open a full event report.</p></div>
+                    <div class="history-header-actions"><button class="secondary-button" onclick="exportFilteredHistory()">Export Filtered</button><button class="primary-button danger-button" onclick="clearTournamentHistory()">Clear History</button></div>
+                </div>
+
+                <div class="history-v2-filters team-form-card compact-card">
+                    <input id="historySearch" placeholder="Search event, champion or team..." oninput="renderHistory()">
+                    <select id="historySeasonFilter" onchange="renderHistory()"><option value="ALL">All Seasons</option></select>
+                    <select id="historySplitFilter" onchange="renderHistory()"><option value="ALL">All Splits</option></select>
+                    <select id="historyRegionFilter" onchange="renderHistory()"><option value="ALL">All Regions</option></select>
+                    <select id="historyTypeFilter" onchange="renderHistory()"><option value="ALL">All Event Types</option><option value="regional">Regional</option><option value="major">Major</option><option value="lcq">Regional LCQ</option><option value="playin">Worlds Play-In</option><option value="worlds">Worlds</option><option value="custom">Custom</option></select>
+                    <select id="historySort" onchange="renderHistory()"><option value="newest">Newest First</option><option value="oldest">Oldest First</option><option value="name">Event Name</option><option value="type">Event Type</option></select>
+                </div>
+
+                <div class="history-v2-layout">
+                    <aside class="history-v2-list-shell"><div id="historyResultSummary" class="history-result-summary"></div><div id="historyList" class="history-v2-list"></div></aside>
+                    <section id="historyDetail" class="history-v2-detail"><div class="history-empty-detail"><strong>Select an event</strong><span>Placements, points, matches, rosters and qualification impact will appear here.</span></div></section>
+                </div>
+            </section>
+
+            <!-- COMPETITION RULES -->
+
+
+            <!-- COMPETITION RULES -->
+
+            <section id="rulesPage"
+                class="page hidden">
+
+                <div class="page-header rules-page-header">
+                    <div>
+                        <span class="rules-page-kicker">League Configuration</span>
+                        <h2>Competition Rules</h2>
+                        <p>
+                            Control event points, Major allocations, Worlds direct places, and Play-In entry paths without editing JavaScript.
+                        </p>
+                    </div>
+
+                    <div class="rules-header-actions">
+                        <button class="secondary-button"
+                            onclick="resetCompetitionRulesToDefaults()">
+                            Reset Defaults
+                        </button>
+
+                        <button class="primary-button"
+                            onclick="saveCompetitionRulesFromEditor(false)">
+                            Save Rules
+                        </button>
+                    </div>
+                </div>
+
+                <p id="rulesStatus"
+                    class="rules-status">
+                    Saved rules are used by new seasons. Apply them separately when an active season is already underway.
+                </p>
+
+                <div id="rulesValidation"
+                    class="rules-validation rules-validation-success">
+                    <strong>Rules valid</strong>
+                    <span>Qualification totals and points ranges are consistent.</span>
+                </div>
+
+                <section class="rules-section-card">
+                    <div class="rules-section-heading">
+                        <div>
+                            <span>Event Scoring</span>
+                            <h3>Points Tables</h3>
+                            <p>
+                                Define a continuous placement range and points award for every event type.
+                            </p>
+                        </div>
+
+                        <button class="secondary-button"
+                            onclick="rebuildPointsAfterRuleChange()">
+                            Rebuild Current-Season Points
+                        </button>
+                    </div>
+
+                    <div class="rules-points-grid">
+                        <article class="rules-points-card">
+                            <h4>Regional</h4>
+                            <div id="rulesPointsRegional"></div>
+                        </article>
+
+                        <article class="rules-points-card">
+                            <h4>Major</h4>
+                            <div id="rulesPointsMajor"></div>
+                        </article>
+
+                        <article class="rules-points-card">
+                            <h4>World Championship</h4>
+                            <div id="rulesPointsWorlds"></div>
+                        </article>
+
+                        <article class="rules-points-card">
+                            <h4>Custom Event</h4>
+                            <div id="rulesPointsCustom"></div>
+                        </article>
+                    </div>
+                </section>
+
+                <section class="rules-section-card">
+                    <div class="rules-section-heading">
+                        <div>
+                            <span>Split Qualification</span>
+                            <h3>Major Allocations</h3>
+                            <p>
+                                Set the number of Major places awarded to every region and the wildcard pool.
+                            </p>
+                        </div>
+
+                        <label class="rules-field-size">
+                            Major Field Size
+                            <input type="number"
+                                id="rulesMajorFieldSize"
+                                min="2"
+                                value="16">
+                        </label>
+                    </div>
+
+                    <div id="rulesMajorSlots"
+                        class="rules-slot-grid"></div>
+                </section>
+
+                <section class="rules-section-card">
+                    <div class="rules-section-heading">
+                        <div>
+                            <span>World Championship</span>
+                            <h3>Main Event Auto Qualification</h3>
+                            <p>
+                                Directly qualified teams skip the Play-In and enter the Worlds Main Event.
+                            </p>
+                        </div>
+
+                        <label class="rules-field-size">
+                            Main Event Size
+                            <input type="number"
+                                id="rulesWorldsMainSize"
+                                min="2"
+                                value="16">
+                        </label>
+                    </div>
+
+                    <div id="rulesWorldsDirectSlots"
+                        class="rules-slot-grid"></div>
+                </section>
+
+                <section class="rules-section-card">
+                    <div class="rules-section-heading">
+                        <div>
+                            <span>Last Chance Path</span>
+                            <h3>Worlds Play-In Entries</h3>
+                            <p>
+                                Spots choose how many teams a region sends. Seed offset 0 means the region's first non-direct seed; for SAM, offset 1 selects its second-ranked team.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="rulesWorldsPlayInSlots"
+                        class="rules-playin-grid"></div>
+
+                    <div class="rules-fixed-format-grid">
+                        <div>
+                            <span>Regional LCQs</span>
+                            <strong>4 regions · 6 teams · 1 winner each</strong>
+                            <label>
+                                LCQ Series
+                                <select id="rulesLcqSeriesLength">
+                                    <option value="3">Best of 3</option>
+                                    <option value="5">Best of 5</option>
+                                    <option value="7" selected>Best of 7</option>
+                                </select>
+                            </label>
+                        </div>
+
+                        <div>
+                            <span>Worlds Play-In</span>
+                            <strong>8 teams · 4 qualify</strong>
+                            <label>
+                                Play-In Series
+                                <select id="rulesPlayInSeriesLength">
+                                    <option value="3">Best of 3</option>
+                                    <option value="5">Best of 5</option>
+                                    <option value="7" selected>Best of 7</option>
+                                </select>
+                            </label>
+                        </div>
+                    </div>
+                </section>
+
+                <div id="rulesAllocationSummary"
+                    class="rules-summary-grid"></div>
+
+                <div class="rules-footer-actions">
+                    <button class="secondary-button"
+                        onclick="saveCompetitionRulesFromEditor(false)">
+                        Save for Future Seasons
+                    </button>
+
+                    <button class="primary-button"
+                        onclick="saveCompetitionRulesFromEditor(true)">
+                        Save & Apply to Active Season
+                    </button>
+                </div>
+
+            </section>
+
+
+            <!-- SYSTEM MANAGER -->
+
+            <section id="systemPage"
+                class="page hidden">
+
+                <div class="page-header system-page-header">
+
+                    <div>
+                        <span class="system-page-kicker">League Safety Centre</span>
+                        <h2>System Manager</h2>
+                        <p>
+                            Protect your league with separate save slots, restore points, storage monitoring, and automatic data checks.
+                        </p>
+                    </div>
+
+                    <div class="system-header-actions">
+                        <button class="secondary-button"
+                            onclick="createRestorePoint('Manual restore point')">
+                            Create Restore Point
+                        </button>
+
+                        <button class="primary-button"
+                            onclick="saveCurrentSlot()">
+                            Save Current League
+                        </button>
+                    </div>
+
+                </div>
+
+                <p id="systemStatus"
+                    class="system-status">
+                    Your active league is protected by the Save Manager.
+                </p>
+
+                <div class="system-section-card">
+
+                    <div class="system-section-header">
+                        <div>
+                            <span class="system-section-kicker">Separate league worlds</span>
+                            <h3>Save Slots</h3>
+                            <p>
+                                Create test leagues without risking your main season. Switching saves automatically stores the current league first.
+                            </p>
+                        </div>
+
+                        <div class="system-header-actions">
+                            <button class="secondary-button"
+                                onclick="openSaveSlotImportPicker()">
+                                Import Save
+                            </button>
+
+                            <button class="secondary-button"
+                                onclick="duplicateCurrentSaveSlot()">
+                                Duplicate Current
+                            </button>
+
+                            <button class="primary-button"
+                                onclick="createEmptySaveSlot()">
+                                Create Empty Save
+                            </button>
+
+                            <input type="file"
+                                id="systemSaveImportFile"
+                                accept=".json,application/json"
+                                onchange="importSaveSlot(event)"
+                                hidden>
+                        </div>
+                    </div>
+
+                    <div id="systemSaveSlots"
+                        class="system-save-grid">
+                    </div>
+
+                </div>
+
+                <div class="system-two-column-grid">
+
+                    <div class="system-section-card">
+
+                        <div class="system-section-header compact">
+                            <div>
+                                <span class="system-section-kicker">Undo major mistakes</span>
+                                <h3>Restore Points</h3>
+                            </div>
+
+                            <button class="primary-button"
+                                onclick="createRestorePoint('Manual restore point')">
+                                Create
+                            </button>
+                        </div>
+
+                        <div id="systemRestorePoints"></div>
+
+                    </div>
+
+                    <div class="system-section-card">
+
+                        <div class="system-section-header compact">
+                            <div>
+                                <span class="system-section-kicker">Browser capacity</span>
+                                <h3>Storage Usage</h3>
+                            </div>
+
+                            <button class="secondary-button"
+                                onclick="compactSystemHistory()">
+                                Compact History
+                            </button>
+                        </div>
+
+                        <div id="systemStorageSummary"></div>
+
+                        <p class="small">
+                            Save slots and restore points are stored in IndexedDB, keeping them separate from the simulator's localStorage limit.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="system-section-card">
+
+                    <div class="system-section-header">
+                        <div>
+                            <span class="system-section-kicker">Integrity scanner</span>
+                            <h3>Data Health</h3>
+                            <p>
+                                Check team IDs, player IDs, rosters, History links, Season progress, points awards, and storage pressure.
+                            </p>
+                        </div>
+
+                        <div class="system-header-actions">
+                            <button class="secondary-button"
+                                onclick="rebuildSystemLeaguePoints()">
+                                Rebuild Points
+                            </button>
+
+                            <button class="secondary-button"
+                                onclick="runSafeDataRepair()">
+                                Run Safe Repair
+                            </button>
+
+                            <button class="primary-button"
+                                onclick="runDataHealthCheck()">
+                                Run Data Check
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="systemHealthResults"></div>
+
+                </div>
+
+            </section>
+
+            <!-- SETTINGS -->
+
+            <section id="settingsPage"
+                class="page hidden">
+
+                <div class="page-header">
+
+                    <h2>Settings</h2>
+
+                    <p>
+                        Control how realistic, chaotic, and fast your simulations feel.
+                    </p>
+
+                </div>
+
+                <div class="team-form-card">
+
+                    <h3>Simulation Controls</h3>
+
+                    <label>
+                        Upset Factor
+                    </label>
+
+                    <select id="settingUpsetFactor">
+
+                        <option value="0">
+                            0% - Ratings matter heavily
+                        </option>
+
+                        <option value="0.10">
+                            10% - Slight upsets
+                        </option>
+
+                        <option value="0.20"
+                            selected>
+
+                            20% - Balanced RLCS chaos
+
+                        </option>
+
+                        <option value="0.35">
+                            35% - More unpredictable
+                        </option>
+
+                        <option value="0.50">
+                            50% - Full chaos
+                        </option>
+
+                    </select>
+
+                    <label>
+                        Simulation Speed
+                    </label>
+
+                    <select id="settingSimulationSpeed">
+
+                        <option value="300">
+                            Fast
+                        </option>
+
+                        <option value="900"
+                            selected>
+
+                            Normal
+
+                        </option>
+
+                        <option value="1500">
+                            Slow
+                        </option>
+
+                    </select>
+
+                    <label>
+                        Overtime Chance
+                    </label>
+
+                    <select id="settingOvertimeChance">
+
+                        <option value="0.10">
+                            10% - Rare OT
+                        </option>
+
+                        <option value="0.18"
+                            selected>
+
+                            18% - Normal
+
+                        </option>
+
+                        <option value="0.30">
+                            30% - Frequent OT
+                        </option>
+
+                    </select>
+
+                    <label>
+                        Goal Scoring Style
+                    </label>
+
+                    <select id="settingScoringProfile">
+
+                        <option value="low">
+                            Low Scoring
+                        </option>
+
+                        <option value="normal"
+                            selected>
+
+                            Normal RLCS
+
+                        </option>
+
+                        <option value="high">
+                            High Scoring
+                        </option>
+
+                    </select>
+
+                    <label>
+                        Rating Importance
+                    </label>
+
+                    <select id="settingRatingImportance">
+
+                        <option value="arcade">
+                            Arcade - More random
+                        </option>
+
+                        <option value="balanced"
+                            selected>
+
+                            Balanced
+
+                        </option>
+
+                        <option value="realistic">
+                            Realistic - Better teams win more often
+                        </option>
+
+                    </select>
+
+                    <label>
+                        Team Form Influence
+                    </label>
+
+                    <select id="settingFormImportance">
+
+                        <option value="off">
+                            Off - Ratings only
+                        </option>
+
+                        <option value="light">
+                            Light - Small momentum effect
+                        </option>
+
+                        <option value="balanced" selected>
+                            Balanced - Recent form matters
+                        </option>
+
+                        <option value="strong">
+                            Strong - Hot and cold streaks matter heavily
+                        </option>
+
+                    </select>
+
+                    <p class="small">
+                        Form uses results from the current event and the three most recent events played with the same roster. Any roster change resets the team to neutral form.
+                    </p>
+
+                    <label>
+                        Roster Chemistry Influence
+                    </label>
+
+                    <select id="settingChemistryImportance">
+                        <option value="off">Off - Ratings and form only</option>
+                        <option value="light">Light - Maximum +0.75 rating</option>
+                        <option value="balanced" selected>Balanced - Maximum +1.50 rating</option>
+                        <option value="strong">Strong - Maximum +2.25 rating</option>
+                    </select>
+
+                    <p class="small">
+                        Chemistry grows as the same three-player roster completes series and events. Roster changes reset chemistry to New Roster without applying an immediate rating penalty.
+                    </p>
+
+                    <div class="settings-actions">
+
+                        <button class="primary-button"
+                            onclick="saveSettingsFromForm()">
+
+                            Save Settings
+
+                        </button>
+
+                        <button class="primary-button danger-button"
+                            onclick="resetSettings()">
+
+                            Reset Defaults
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <div class="team-form-card">
+
+                    <h3>Current Settings</h3>
+
+                    <div id="settingsSummary"></div>
+
+                </div>
+
+                <div class="team-form-card">
+
+                    <h3>Data Backup &amp; Transfer</h3>
+
+                    <p>
+                        Export every team, player, logo, event, season, league table, transfer, and setting into one backup file. Import that file when moving between the direct file version and localhost.
+                    </p>
+
+                    <div class="settings-actions">
+
+                        <button class="primary-button"
+                            onclick="exportSimulatorBackup()">
+
+                            Export Backup
+
+                        </button>
+
+                        <button class="primary-button"
+                            onclick="openSimulatorBackupPicker()">
+
+                            Import Backup
+
+                        </button>
+
+                        <input type="file"
+                            id="simulatorBackupFile"
+                            accept=".json,application/json"
+                            onchange="importSimulatorBackup(event)"
+                            hidden>
+
+                    </div>
+
+                    <div id="backupStorageSummary"></div>
+
+                    <p id="backupStatus">
+                        No backup action has been performed yet.
+                    </p>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+<script src="./js/app.js"></script>
+<script src="./js/db.js"></script>
+<script src="./js/settings.js"></script>
+<script src="./js/teams.js"></script>
+<script src="./js/tournament.js"></script>
+<script src="./js/simulationlab.js"></script>
+<script src="./js/events.js"></script>
+<script src="./js/rules.js"></script>
+<script src="./js/league.js"></script>
+<script src="./js/lan.js"></script>
+<script src="./js/history.js"></script>
+<script src="./js/formats.js"></script>
+<script src="./js/groupstage.js"></script>
+<script src="./js/season.js"></script>
+<script src="./js/seasonarchive.js"></script>
+<script src="./js/lcq.js"></script>
+<script src="./js/playin.js"></script>
+<script src="./js/transfers.js"></script>
+<script src="./js/development.js"></script>
+<script src="./js/journalist.js"></script>
+<script src="./js/offseason.js"></script>
+<script src="./js/profiles.js"></script>
+<script src="./js/system.js"></script>
+
+<!-- Visual overhaul layer: live match playback, rivalry/MVP surfacing.
+     Loaded last so it can safely wrap the functions above without
+     changing any simulation logic. -->
+<script src="./js/matchcenter.js"></script>
+<script src="./js/insane-upgrades.js"></script>
+
+</body>
+
+</html>
